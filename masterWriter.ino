@@ -12,8 +12,17 @@
 
 #include <Wire.h>
 
+//sensor code
+#include "Adafruit_Si7021.h"
+
+Adafruit_Si7021 sensor = Adafruit_Si7021();
+
+
 void setup()
 {
+  while (!Serial) {
+    delay(10);
+  }
   Serial.begin(9600);
     Serial.println("Wire has started bish");
 
@@ -24,13 +33,19 @@ int x = 0;
 
 void loop()
 {
+  String hum = "Humidity: ";
+  String temp = " Temp: ";
+  String dataCombo = String(hum + sensor.readHumidity() + temp + sensor.readTemperature());
+  Serial.print("Humidity:    ");
+  Serial.print(sensor.readHumidity(), 2);
+  Serial.print("\tTemperature: ");
+  Serial.println(sensor.readTemperature(), 2);
   Wire.beginTransmission(4); // transmit to device #4
-  Wire.write("x is ");        // sends five bytes
-  Wire.write(x);              // sends one byte
-  Serial.println(x);
+  //Wire.write("Humidity | Temperature");        // sends five bytes
+  Wire.write(String(dataCombo).c_str());   
+  Wire.write(x);
   Wire.endTransmission();    // stop transmitting
 
-  x++;
   delay(100);
 }
 
