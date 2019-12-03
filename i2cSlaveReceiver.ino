@@ -65,17 +65,18 @@ void loop()
 // this function is registered as an event, see setup()
 void receiveEvent(int howMany)
 {
+  String totalData = "";
   myFile = SD.open("testData.txt", FILE_WRITE);
   while(1 < Wire.available()) // loop through all but the last
   {
     char c = Wire.read(); // receive byte as a character
     Serial.print(c);         // print the character
-    
+    totalData = totalData + c;
   
   }
   
-  int x = Wire.read();    // receive byte as an integer
+  byte x = Wire.read();    // receive byte as an integer
   Serial.println(x);
-  myFile.println(x);
+  myFile.println(totalData);
   myFile.close();
 }
